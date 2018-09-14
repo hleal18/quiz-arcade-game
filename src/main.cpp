@@ -54,30 +54,35 @@ void loop()
             activate_player(button_pin_1);
             restricted_state = true;
         }
+        // Player 2
         else if (digitalRead(button_pin_2))
         {
             Serial.println("Lectura pin 2");
             activate_player(button_pin_2);
             restricted_state = true;
         }
+        // Player 3
         else if (digitalRead(button_pin_3))
         {
             Serial.println("Lectura pin 3");
             activate_player(button_pin_3);
             restricted_state = true;
         }
+        // Player 4
         else if (digitalRead(button_pin_4))
         {
             Serial.println("Lectura pin 4");
             activate_player(button_pin_4);
             restricted_state = true;
         }
+        // Player 5
         else if (digitalRead(button_pin_5))
         {
             Serial.println("Lectura pin 5");
             activate_player(button_pin_5);
             restricted_state = true;
         }
+        // Player 6
         else if (digitalRead(button_pin_6))
         {
             Serial.println("Lectura pin 6");
@@ -104,4 +109,8 @@ void activate_player(uint8_t pin)
     digitalWrite(led_pin_4, pin == button_pin_4);
     digitalWrite(led_pin_5, pin == button_pin_5);
     digitalWrite(led_pin_6, pin == button_pin_6);
+    if (pin != button_reboot)
+    {
+        tone(buzzer, 2500, 500);
+    }    
 }
