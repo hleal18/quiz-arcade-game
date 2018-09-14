@@ -1,20 +1,26 @@
 #include <Arduino.h>
 
-const int button_pin_1 = D7;
-const int button_pin_2 = D6;
-const int button_pin_3 = D5;
+const uint8_t button_pin_1 = A1;
+const uint8_t button_pin_2 = 2;
+const uint8_t button_pin_3 = 3;
+const uint8_t button_pin_4 = 4;
+const uint8_t button_pin_5 = A0;
+const uint8_t button_pin_6 = 6;
 
-const int button_reboot = D8;
+const uint8_t button_reboot = 5;
 
-const int led_pin_1 = D4;
-const int led_pin_2 = D2;
-const int led_pin_3 = D1;
+const uint8_t led_pin_1 = 7;
+const uint8_t led_pin_2 = 8;
+const uint8_t led_pin_3 = 9;
+const uint8_t led_pin_4 = 10;
+const uint8_t led_pin_5 = 11;
+const uint8_t led_pin_6 = 12;
 
-const int led_restricted_pin = D0;
+const uint8_t buzzer = A5;
 
-int lectura = 0;
+bool restricted_state = false;
 
-bool estado_restringido = false;
+void activate_player(uint8_t pin);
 
 void setup()
 {
@@ -23,61 +29,79 @@ void setup()
     pinMode(button_pin_1, INPUT);
     pinMode(button_pin_2, INPUT);
     pinMode(button_pin_3, INPUT);
+    pinMode(button_pin_4, INPUT);
+    pinMode(button_pin_5, INPUT);
+    pinMode(button_pin_6, INPUT);
     pinMode(button_reboot, INPUT);
     pinMode(led_pin_1, OUTPUT);
     pinMode(led_pin_2, OUTPUT);
     pinMode(led_pin_3, OUTPUT);
-    pinMode(led_restricted_pin, OUTPUT);
+    pinMode(led_pin_4, OUTPUT);
+    pinMode(led_pin_5, OUTPUT);
+    pinMode(led_pin_6, OUTPUT);
+    pinMode(buzzer, OUTPUT);
 }
 
 void loop()
 {
     // put your main code here, to run repeatedly:
-    lectura = digitalRead(button_pin_1);
-
-    if (lectura == HIGH && !estado_restringido)
+    if (!restricted_state)
     {
-        Serial.println("Lectura pin 1");
-        digitalWrite(led_pin_1, HIGH);
-        digitalWrite(led_pin_2, LOW);
-        digitalWrite(led_pin_3, LOW);
-        digitalWrite(led_restricted_pin, HIGH);
-        estado_restringido = true;
+        // Player 1
+        if (digitalRead(button_pin_1))
+        {
+            Serial.println("Lectura pin 1");
+            activate_player(button_pin_1);
+            restricted_state = true;
+        }
+        else if (digitalRead(button_pin_2))
+        {
+            Serial.println("Lectura pin 2");
+            activate_player(button_pin_2);
+            restricted_state = true;
+        }
+        else if (digitalRead(button_pin_3))
+        {
+            Serial.println("Lectura pin 3");
+            activate_player(button_pin_3);
+            restricted_state = true;
+        }
+        else if (digitalRead(button_pin_4))
+        {
+            Serial.println("Lectura pin 4");
+            activate_player(button_pin_4);
+            restricted_state = true;
+        }
+        else if (digitalRead(button_pin_5))
+        {
+            Serial.println("Lectura pin 5");
+            activate_player(button_pin_5);
+            restricted_state = true;
+        }
+        else if (digitalRead(button_pin_6))
+        {
+            Serial.println("Lectura pin 6");
+            activate_player(button_pin_6);
+            restricted_state = true;
+        }
     }
-
-    lectura = digitalRead(button_pin_2);
-
-    if (lectura == HIGH && !estado_restringido)
+    else
     {
-        Serial.println("Lectura pin 2");
-        digitalWrite(led_pin_1, LOW);
-        digitalWrite(led_pin_2, HIGH);
-        digitalWrite(led_pin_3, LOW);
-        digitalWrite(led_restricted_pin, HIGH);
-        estado_restringido = true;
+        if (digitalRead(button_reboot))
+        {
+            Serial.println("Lectura reboot");
+            activate_player(button_reboot);
+            restricted_state = false;
+        }
     }
+}
 
-    lectura = digitalRead(button_pin_3);
-
-    if (lectura == HIGH && !estado_restringido)
-    {
-        Serial.println("Lectura pin 3");
-        digitalWrite(led_pin_1, LOW);
-        digitalWrite(led_pin_2, LOW);
-        digitalWrite(led_pin_3, HIGH);
-        digitalWrite(led_restricted_pin, HIGH);
-        estado_restringido = true;
-    }
-
-    lectura = digitalRead(button_reboot);
-
-    if (lectura == HIGH && estado_restringido)
-    {
-        Serial.println("Lectura pin de reboot");
-        digitalWrite(led_pin_1, LOW);
-        digitalWrite(led_pin_2, LOW);
-        digitalWrite(led_pin_3, LOW);
-        digitalWrite(led_restricted_pin, LOW);
-        estado_restringido = false;
-    }
+void activate_player(uint8_t pin)
+{
+    digitalWrite(led_pin_1, pin == button_pin_1);
+    digitalWrite(led_pin_2, pin == button_pin_2);
+    digitalWrite(led_pin_3, pin == button_pin_3);
+    digitalWrite(led_pin_4, pin == button_pin_4);
+    digitalWrite(led_pin_5, pin == button_pin_5);
+    digitalWrite(led_pin_6, pin == button_pin_6);
 }
